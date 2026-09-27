@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -11,7 +11,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data } = await supabase.from('experiences').select('name, seo_title, seo_description').eq('slug', slug).single()
   
   if (!data) {
@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function ExperienceDetailPage({ params }: PageProps) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   const { data } = await supabase
     .from('experiences')

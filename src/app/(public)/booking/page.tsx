@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import { Mail, Phone, MessageCircle, MapPin, Clock } from 'lucide-react'
 import BookingForm from './BookingForm'
 
@@ -10,7 +10,7 @@ export const metadata = {
 }
 
 export default async function BookingPage() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   let { data: experiences } = await supabase
     .from('experiences')
     .select('id, name, price, currency, duration')
@@ -96,3 +96,4 @@ export default async function BookingPage() {
     </div>
   )
 }
+

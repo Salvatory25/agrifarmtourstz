@@ -1,4 +1,5 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
 export async function createClient() {
@@ -24,6 +25,22 @@ export async function createClient() {
           }
         },
       },
+    }
+  )
+}
+
+// Use this client for public data fetching (e.g. public pages)
+// It does NOT access cookies(), so it allows Next.js to statically cache the page.
+export function createPublicClient() {
+  return createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      global: {
+        fetch: (url, options) => {
+          return fetch(url, { ...options, next: { revalidate: 300 } })
+        }
+      }
     }
   )
 }

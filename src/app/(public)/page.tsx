@@ -208,3 +208,4 @@ export default async function Home() {
 function testimonialExists(items: any[] | undefined) {
   return Array.isArray(items) && items.length > 0
 }
+

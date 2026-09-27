@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import { MapPin, ArrowRight } from 'lucide-react'
@@ -7,7 +7,7 @@ import { safeImageUrl, fallbackDestinations, fallbackExperiences } from '@/lib/c
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data } = await supabase.from('destinations').select('name,seo_title,seo_description').eq('slug', slug).single()
   if (!data) {
     const fallback = fallbackDestinations.find(d => d.slug === slug)
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function DestinationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data } = await supabase.from('destinations').select('*').eq('slug', slug).eq('is_published', true).maybeSingle()
   const { data: experiencesData } = data ? await supabase.from('experiences').select('*').eq('destination_id', data.id).eq('is_published', true) : { data: null }
   

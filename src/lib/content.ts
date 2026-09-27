@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createClient, createPublicClient } from '@/utils/supabase/server'
 
 export function safeImageUrl(value: string | null | undefined, fallback: string) {
   return typeof value === 'string' && value.trim().length > 0 ? value : fallback
@@ -234,7 +234,7 @@ export const fallbackTestimonials: TestimonialItem[] = [
 ]
 
 export async function getHomepageContent() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
 
   try {
     const [heroResult, introResult, categoriesResult, experiencesResult, destinationsResult, storiesResult, galleryResult, testimonialsResult] = await Promise.all([

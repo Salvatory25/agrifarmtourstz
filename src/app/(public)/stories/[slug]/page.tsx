@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
@@ -7,7 +7,7 @@ import { safeImageUrl, fallbackStories } from '@/lib/content'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data } = await supabase.from('blog_posts').select('title,seo_title,seo_description').eq('slug', slug).single()
   if (!data) {
     const fallback = fallbackStories.find(s => s.slug === slug)
@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function StoryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data } = await supabase
     .from('blog_posts')
     .select('*, blog_categories(name), profiles(first_name, last_name)')

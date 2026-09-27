@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Leaf, Users, Heart, Globe } from 'lucide-react'
@@ -11,7 +11,7 @@ export const metadata = {
 }
 
 export default async function AboutPage() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data: team } = await supabase
     .from('team_members')
     .select('*')
@@ -129,3 +129,4 @@ export default async function AboutPage() {
     </div>
   )
 }
+

@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { MapPin, ArrowRight } from 'lucide-react'
 import { safeImageUrl } from '@/lib/content'
@@ -69,7 +69,7 @@ const fallbackDestinations = [
 ]
 
 export default async function DestinationsPage() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data: destinations } = await supabase
     .from('destinations')
     .select('*')
@@ -181,3 +181,4 @@ export default async function DestinationsPage() {
     </div>
   )
 }
+

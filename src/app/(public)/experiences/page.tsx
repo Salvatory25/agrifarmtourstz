@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { MapPin, Clock, ArrowRight, Star } from 'lucide-react'
 import { safeImageUrl } from '@/lib/content'
@@ -63,7 +63,7 @@ const fallbackExperiences = [
 ]
 
 export default async function ExperiencesPage() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data: experiences } = await supabase
     .from('experiences')
     .select('*, destinations(name), experience_categories(name)')
@@ -164,3 +164,4 @@ export default async function ExperiencesPage() {
     </div>
   )
 }
+

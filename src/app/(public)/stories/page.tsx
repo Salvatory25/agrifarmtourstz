@@ -1,4 +1,4 @@
-import { createClient } from '@/utils/supabase/server'
+import { createPublicClient } from '@/utils/supabase/server'
 import Link from 'next/link'
 import { Calendar, ArrowRight, Feather } from 'lucide-react'
 import { safeImageUrl } from '@/lib/content'
@@ -69,7 +69,7 @@ const fallbackPosts = [
 ]
 
 export default async function StoriesPage() {
-  const supabase = await createClient()
+  const supabase = createPublicClient()
   const { data: posts } = await supabase
     .from('blog_posts')
     .select('*, blog_categories(name)')
@@ -175,3 +175,4 @@ export default async function StoriesPage() {
     </div>
   )
 }
+
