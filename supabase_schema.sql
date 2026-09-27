@@ -256,3 +256,23 @@ CREATE TRIGGER update_experiences_modtime
 BEFORE UPDATE ON public.experiences
 FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
 -- (You should attach this trigger to all tables with an updated_at column)
+
+-- 15. CONTACT SUBMISSIONS / LEADS
+CREATE TABLE IF NOT EXISTS public.contact_submissions (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name VARCHAR(255) NOT NULL,
+  company VARCHAR(255),
+  phone VARCHAR(50),
+  email VARCHAR(255) NOT NULL,
+  subject VARCHAR(255),
+  message TEXT NOT NULL,
+  status VARCHAR(50) DEFAULT 'New', -- 'New', 'Contacted', 'In Progress', 'Converted'
+  source VARCHAR(100) DEFAULT 'Website Contact Form',
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+DROP TRIGGER IF EXISTS update_contact_submissions_modtime ON public.contact_submissions;
+CREATE TRIGGER update_contact_submissions_modtime
+BEFORE UPDATE ON public.contact_submissions
+FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();

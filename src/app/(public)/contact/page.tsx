@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { MapPin, Mail, Phone } from 'lucide-react'
+import { ContactForm } from '@/components/contact/ContactForm'
 
 export const metadata = {
   title: 'Contact Us | AgriFarm Tours TZ',
@@ -112,43 +113,7 @@ export default function ContactPage() {
           {/* Right Column: Send us a message */}
           <div className="w-full lg:w-7/12">
             <h2 className="text-3xl font-bold text-gray-900 mb-8">Send us a message</h2>
-            <form className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium text-gray-700">Name</label>
-                  <input type="text" id="name" placeholder="Name" className="w-full px-4 py-3 bg-gray-50 border-none rounded-none focus:ring-2 focus:ring-green-700 outline-none text-sm" />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="company" className="text-sm font-medium text-gray-700">Company</label>
-                  <input type="text" id="company" placeholder="Company" className="w-full px-4 py-3 bg-gray-50 border-none rounded-none focus:ring-2 focus:ring-green-700 outline-none text-sm" />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="phone" className="text-sm font-medium text-gray-700">Phone</label>
-                  <input type="tel" id="phone" placeholder="Phone" className="w-full px-4 py-3 bg-gray-50 border-none rounded-none focus:ring-2 focus:ring-green-700 outline-none text-sm" />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium text-gray-700">Email</label>
-                  <input type="email" id="email" placeholder="Email" className="w-full px-4 py-3 bg-gray-50 border-none rounded-none focus:ring-2 focus:ring-green-700 outline-none text-sm" />
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium text-gray-700">Subject</label>
-                <input type="text" id="subject" placeholder="Subject" className="w-full px-4 py-3 bg-gray-50 border-none rounded-none focus:ring-2 focus:ring-green-700 outline-none text-sm" />
-              </div>
-
-              <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-medium text-gray-700">Message</label>
-                <textarea id="message" rows={5} placeholder="Message" className="w-full px-4 py-3 bg-gray-50 border-none rounded-none focus:ring-2 focus:ring-green-700 outline-none text-sm resize-none"></textarea>
-              </div>
-
-              <button type="submit" className="w-full bg-[var(--primary)] text-white font-medium py-4 rounded-none hover:bg-[#223a1a] transition-colors mt-4">
-                Send
-              </button>
-            </form>
+            <ContactForm />
           </div>
 
         </div>
