@@ -55,6 +55,7 @@ export default async function TestimonialsPage() {
                 </div>
               </div>
             </div>
+            </div>
           ))}
         </div>
       )}
