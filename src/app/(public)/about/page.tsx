@@ -29,7 +29,7 @@ export default async function AboutPage() {
     <div className="min-h-screen">
       {/* Hero */}
       <section className="relative h-80 flex items-end pb-12 px-6 overflow-hidden bg-gradient-to-br from-[#2d4a22] to-[#1a2e12]">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white/10 to-transparent" />
         <div className="relative z-10 max-w-7xl mx-auto w-full pt-28">
           <p className="text-[var(--accent)] text-sm font-medium uppercase tracking-widest mb-2">About Us</p>
           <h1 className="text-4xl md:text-5xl font-serif text-white font-bold">Our Story</h1>
