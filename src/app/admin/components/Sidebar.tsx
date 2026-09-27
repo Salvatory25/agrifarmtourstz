@@ -34,8 +34,9 @@ const navigation = [
   { name: 'FAQs', href: '/admin/faqs', icon: HelpCircle },
   { name: 'Homepage', href: '/admin/homepage', icon: Layout },
   { name: 'Media Library', href: '/admin/media', icon: FolderOpen },
+  { name: 'CRM & Leads', href: '/admin/crm', icon: UsersRound },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
-  { name: 'Users', href: '/admin/users', icon: UsersRound },
+  { name: 'Team Users', href: '/admin/users', icon: Users },
 ]
 
 export function Sidebar() {

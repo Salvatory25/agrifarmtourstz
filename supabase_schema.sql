@@ -4,7 +4,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- 1. ROLES & PROFILES
-CREATE TABLE public.roles (
+CREATE TABLE IF NOT EXISTS public.roles (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(50) NOT NULL UNIQUE, -- 'SUPER_ADMIN', 'CONTENT_ADMIN', 'BOOKING_ADMIN'
   description TEXT,
@@ -12,7 +12,7 @@ CREATE TABLE public.roles (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE public.profiles (
+CREATE TABLE IF NOT EXISTS public.profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   role_id UUID REFERENCES public.roles(id) ON DELETE SET NULL,
   first_name VARCHAR(100),
@@ -23,7 +23,7 @@ CREATE TABLE public.profiles (
 );
 
 -- 2. DESTINATIONS
-CREATE TABLE public.destinations (
+CREATE TABLE IF NOT EXISTS public.destinations (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(255) NOT NULL,
   slug VARCHAR(255) NOT NULL UNIQUE,
@@ -40,17 +40,19 @@ CREATE TABLE public.destinations (
 );
 
 -- 3. EXPERIENCE CATEGORIES
-CREATE TABLE public.experience_categories (
+CREATE TABLE IF NOT EXISTS public.experience_categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(100) NOT NULL,
   slug VARCHAR(100) NOT NULL UNIQUE,
   description TEXT,
+  image_url TEXT,
+  is_published BOOLEAN DEFAULT TRUE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- 4. EXPERIENCES
-CREATE TABLE public.experiences (
+CREATE TABLE IF NOT EXISTS public.experiences (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   destination_id UUID REFERENCES public.destinations(id) ON DELETE SET NULL,
   category_id UUID REFERENCES public.experience_categories(id) ON DELETE SET NULL,
@@ -77,7 +79,7 @@ CREATE TABLE public.experiences (
 );
 
 -- 5. EXPERIENCE IMAGES (Gallery per experience)
-CREATE TABLE public.experience_images (
+CREATE TABLE IF NOT EXISTS public.experience_images (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   experience_id UUID REFERENCES public.experiences(id) ON DELETE CASCADE,
   image_url TEXT NOT NULL,
@@ -87,7 +89,7 @@ CREATE TABLE public.experience_images (
 );
 
 -- 6. AVAILABILITY & CALENDAR
-CREATE TABLE public.availability (
+CREATE TABLE IF NOT EXISTS public.availability (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   experience_id UUID REFERENCES public.experiences(id) ON DELETE CASCADE,
   date DATE NOT NULL,
@@ -100,7 +102,7 @@ CREATE TABLE public.availability (
 );
 
 -- 7. BOOKINGS & GUESTS
-CREATE TABLE public.bookings (
+CREATE TABLE IF NOT EXISTS public.bookings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   reference_code VARCHAR(50) NOT NULL UNIQUE,
   experience_id UUID REFERENCES public.experiences(id) ON DELETE RESTRICT,
@@ -119,7 +121,7 @@ CREATE TABLE public.bookings (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE public.booking_guests (
+CREATE TABLE IF NOT EXISTS public.booking_guests (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   booking_id UUID REFERENCES public.bookings(id) ON DELETE CASCADE,
   full_name VARCHAR(255) NOT NULL,
@@ -129,7 +131,7 @@ CREATE TABLE public.booking_guests (
 );
 
 -- 8. STORIES / BLOG
-CREATE TABLE public.blog_categories (
+CREATE TABLE IF NOT EXISTS public.blog_categories (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(100) NOT NULL,
   slug VARCHAR(100) NOT NULL UNIQUE,
@@ -137,7 +139,7 @@ CREATE TABLE public.blog_categories (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE TABLE public.blog_posts (
+CREATE TABLE IF NOT EXISTS public.blog_posts (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   category_id UUID REFERENCES public.blog_categories(id) ON DELETE SET NULL,
   author_id UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
@@ -157,7 +159,7 @@ CREATE TABLE public.blog_posts (
 );
 
 -- 9. TESTIMONIALS
-CREATE TABLE public.testimonials (
+CREATE TABLE IF NOT EXISTS public.testimonials (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   experience_id UUID REFERENCES public.experiences(id) ON DELETE SET NULL,
   customer_name VARCHAR(255) NOT NULL,
@@ -171,7 +173,7 @@ CREATE TABLE public.testimonials (
 );
 
 -- 10. TEAM MEMBERS
-CREATE TABLE public.team_members (
+CREATE TABLE IF NOT EXISTS public.team_members (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   name VARCHAR(255) NOT NULL,
   position VARCHAR(255) NOT NULL,
@@ -184,8 +186,17 @@ CREATE TABLE public.team_members (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 11. GENERAL GALLERY
-CREATE TABLE public.gallery_items (
+-- 11. HOMEPAGE SECTIONS
+CREATE TABLE IF NOT EXISTS public.homepage_sections (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  section_key VARCHAR(100) NOT NULL UNIQUE,
+  content JSONB NOT NULL DEFAULT '{}'::jsonb,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 12. GENERAL GALLERY
+CREATE TABLE IF NOT EXISTS public.gallery_items (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   title VARCHAR(255),
   image_url TEXT NOT NULL,
@@ -195,8 +206,8 @@ CREATE TABLE public.gallery_items (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 12. FAQS
-CREATE TABLE public.faqs (
+-- 13. FAQS
+CREATE TABLE IF NOT EXISTS public.faqs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   question TEXT NOT NULL,
   answer TEXT NOT NULL,
@@ -207,8 +218,8 @@ CREATE TABLE public.faqs (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 13. SITE SETTINGS (Singleton pattern conceptually)
-CREATE TABLE public.site_settings (
+-- 14. SITE SETTINGS
+CREATE TABLE IF NOT EXISTS public.site_settings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   company_name VARCHAR(255) DEFAULT 'AgriFarm Tours TZ',
   logo_url TEXT,
@@ -240,6 +251,7 @@ END;
 $$ language 'plpgsql';
 
 -- Trigger setup example for experiences
+DROP TRIGGER IF EXISTS update_experiences_modtime ON public.experiences;
 CREATE TRIGGER update_experiences_modtime
 BEFORE UPDATE ON public.experiences
 FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();

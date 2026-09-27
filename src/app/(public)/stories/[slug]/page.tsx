@@ -3,25 +3,39 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
 import { notFound } from 'next/navigation'
+import { safeImageUrl, fallbackStories } from '@/lib/content'
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const supabase = await createClient()
   const { data } = await supabase.from('blog_posts').select('title,seo_title,seo_description').eq('slug', slug).single()
-  if (!data) return { title: 'Story Not Found' }
+  if (!data) {
+    const fallback = fallbackStories.find(s => s.slug === slug)
+    if (fallback) return { title: `${fallback.title} | AgriFarm Tours TZ`, description: fallback.excerpt }
+    return { title: 'Story Not Found' }
+  }
   return { title: data.seo_title || data.title + ' | AgriFarm Tours TZ', description: data.seo_description }
 }
 
 export default async function StoryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params
   const supabase = await createClient()
-  const { data: post } = await supabase
+  const { data } = await supabase
     .from('blog_posts')
     .select('*, blog_categories(name), profiles(first_name, last_name)')
     .eq('slug', slug)
     .eq('is_published', true)
-    .single()
-  if (!post) notFound()
+    .maybeSingle()
+  let post = data
+
+  if (!post) {
+    const fallback = fallbackStories.find(s => s.slug === slug)
+    if (fallback) {
+      post = { ...fallback, content: fallback.excerpt || 'Full story coming soon.' }
+    } else {
+      notFound()
+    }
+  }
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -48,8 +62,8 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
         </div>
 
         {post.cover_image && (
-          <div className="relative w-full h-80 md:h-96 rounded-2xl overflow-hidden mb-10">
-            <Image src={post.cover_image} alt={post.title} fill className="object-cover" />
+          <div className="relative w-full h-72 sm:h-80 md:h-96 rounded-none overflow-hidden mb-10">
+            <Image src={safeImageUrl(post.cover_image, 'https://images.unsplash.com/photo-1501786223405-6d024d7c3b8d?auto=format&fit=crop&q=80')} alt={post.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 768px" />
           </div>
         )}
 

@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Leaf, Users, Heart, Globe } from 'lucide-react'
 
+export const revalidate = 3600 // Re-fetch team members at most once per hour
+
 export const metadata = {
   title: 'Our Story | AgriFarm Tours TZ',
   description: 'Learn about AgriFarm Tours TZ — our mission, our team, and our passion for authentic Tanzanian agricultural tourism.',
@@ -27,7 +29,7 @@ export default async function AboutPage() {
     <div className="min-h-screen">
       {/* Hero */}
       <section className="relative h-80 flex items-end pb-12 px-6 overflow-hidden bg-gradient-to-br from-[#2d4a22] to-[#1a2e12]">
-        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }} />
+        <div className="absolute inset-0 opacity-20" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }} />
         <div className="relative z-10 max-w-7xl mx-auto w-full pt-28">
           <p className="text-[var(--accent)] text-sm font-medium uppercase tracking-widest mb-2">About Us</p>
           <h1 className="text-4xl md:text-5xl font-serif text-white font-bold">Our Story</h1>
@@ -52,7 +54,7 @@ export default async function AboutPage() {
               Start Your Journey <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </div>
-          <div className="bg-[var(--muted)] rounded-3xl p-8 h-80 flex items-center justify-center">
+          <div className="bg-[var(--muted)] rounded-none p-8 h-80 flex items-center justify-center">
             <div className="text-center">
               <div className="text-6xl font-serif font-bold text-[var(--primary)] mb-2">Since</div>
               <div className="text-8xl font-serif font-bold text-[var(--accent)]">2020</div>
@@ -71,7 +73,7 @@ export default async function AboutPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {values.map((v) => (
-              <div key={v.title} className="text-center p-8 rounded-2xl bg-[var(--muted)] hover:bg-[var(--primary)] hover:text-white group transition-all duration-300">
+              <div key={v.title} className="text-center p-8 rounded-none bg-[var(--muted)] hover:bg-[var(--primary)] hover:text-white group transition-all duration-300">
                 <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-5 group-hover:bg-white/20 transition-colors">
                   <v.icon className="w-7 h-7 text-[var(--primary)] group-hover:text-white transition-colors" />
                 </div>
@@ -118,7 +120,7 @@ export default async function AboutPage() {
             <Link href="/booking" className="bg-[var(--accent)] text-gray-900 px-8 py-3 rounded-full font-medium hover:bg-[#d4a84d] transition-colors">
               Plan Your Visit
             </Link>
-            <a href="mailto:agrifarmtourstz@gmail.com" className="border border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
+            <a href="mailto:admin@agrifarmtours.co.tz" className="border border-white text-white px-8 py-3 rounded-full font-medium hover:bg-white/10 transition-colors">
               Contact Us
             </a>
           </div>

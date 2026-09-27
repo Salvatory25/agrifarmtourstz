@@ -1,13 +1,19 @@
 import { createClient } from '@/utils/supabase/server'
 import { Plus } from 'lucide-react'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
 
   const {
     data: { user },
+    error,
   } = await supabase.auth.getUser()
+
+  if (error || !user) {
+    redirect('/admin/login')
+  }
 
   // Fetch real statistics
   const [

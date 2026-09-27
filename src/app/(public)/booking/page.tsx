@@ -2,6 +2,8 @@ import { createClient } from '@/utils/supabase/server'
 import { Mail, Phone, MessageCircle, MapPin, Clock } from 'lucide-react'
 import BookingForm from './BookingForm'
 
+export const revalidate = 600 // Re-fetch experiences list every 10 minutes
+
 export const metadata = {
   title: 'Plan Your Visit | AgriFarm Tours TZ',
   description: 'Book your authentic agricultural tour experience in Tanzania. Contact us to plan your perfect visit.',
@@ -9,92 +11,88 @@ export const metadata = {
 
 export default async function BookingPage() {
   const supabase = await createClient()
-  const { data: experiences } = await supabase
+  let { data: experiences } = await supabase
     .from('experiences')
     .select('id, name, price, currency, duration')
     .eq('is_published', true)
     .order('name', { ascending: true })
 
+  // Provide beautiful fallback dummy data if DB is not yet set up
+  if (!experiences || experiences.length === 0) {
+    experiences = [
+      { id: '1', name: 'Kilimanjaro Coffee Tour', price: null, currency: 'USD', duration: null },
+      { id: '2', name: 'Zanzibar Spice Farm Experience', price: null, currency: 'USD', duration: null },
+      { id: '3', name: 'Traditional Village Cooking Masterclass', price: null, currency: 'USD', duration: null },
+      { id: '4', name: 'Organic Cocoa Plantation Walk', price: null, currency: 'USD', duration: null }
+    ]
+  }
+
   return (
-    <div className="min-h-screen">
-      <section className="relative h-64 bg-[var(--primary)] flex items-end pb-12 px-6">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#2d4a22] to-[#1a2e12]" />
-        <div className="relative z-10 max-w-7xl mx-auto w-full pt-28">
-          <p className="text-[var(--accent)] text-sm font-medium uppercase tracking-widest mb-2">Let's Begin</p>
-          <h1 className="text-4xl md:text-5xl font-serif text-white font-bold">Plan Your Visit</h1>
-        </div>
-      </section>
+    <div className="relative min-h-screen flex items-center justify-center pt-28 pb-12 px-4 sm:px-6">
+      {/* Full-screen Background Image with Overlay */}
+      <div className="absolute inset-0 z-0">
+        <img 
+          src="/images/hero-bg.jpg" 
+          alt="Tanzania Landscape" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]" />
+      </div>
 
-      <section className="py-20 px-6 bg-[var(--background)]">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
-          <div className="lg:col-span-2">
-            <h2 className="text-2xl font-serif font-bold text-[var(--foreground)] mb-2">Send Us a Message</h2>
-            <p className="text-[var(--muted-foreground)] mb-8">Fill out the form below and our team will get back to you within 24 hours to confirm your booking.</p>
-            <BookingForm experiences={experiences || []} />
+      {/* Main Card */}
+      <div className="relative z-10 w-full max-w-[1200px] bg-white rounded-none md:rounded-none shadow-2xl overflow-hidden flex flex-col md:flex-row min-h-[700px]">
+        
+        {/* Left Side: Form Section */}
+        <div className="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+          <div className="mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 tracking-tight mb-2">Start your <br/>perfect trip</h1>
+            <p className="text-gray-500 mt-4">Let's craft your authentic agricultural journey.</p>
           </div>
+          
+          <BookingForm experiences={experiences || []} />
+          
+          <div className="mt-8 text-center text-sm text-gray-500">
+            Have questions? <a href="mailto:admin@agrifarmtours.co.tz" className="text-gray-900 font-semibold hover:underline">Get in touch</a>
+          </div>
+        </div>
 
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-8 border border-[var(--border)] shadow-sm">
-              <h3 className="font-serif text-lg font-bold text-[var(--foreground)] mb-6">Get in Touch</h3>
-              <div className="space-y-5">
-                <a href="tel:+255785844931" className="flex items-start gap-4 group">
-                  <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--primary)] transition-colors">
-                    <Phone className="w-4 h-4 text-[var(--primary)] group-hover:text-white transition-colors" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Phone / WhatsApp</p>
-                    <p className="text-sm font-medium text-[var(--foreground)]">+255 785 844 931</p>
-                    <p className="text-sm text-gray-400">+255 746 710 875</p>
-                  </div>
-                </a>
-                <a href="mailto:agrifarmtourstz@gmail.com" className="flex items-start gap-4 group">
-                  <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--primary)] transition-colors">
-                    <Mail className="w-4 h-4 text-[var(--primary)] group-hover:text-white transition-colors" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Email</p>
-                    <p className="text-sm font-medium text-[var(--foreground)]">agrifarmtourstz@gmail.com</p>
-                  </div>
-                </a>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="w-4 h-4 text-[var(--primary)]" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Location</p>
-                    <p className="text-sm font-medium text-[var(--foreground)]">Tanzania, East Africa</p>
-                  </div>
+        {/* Right Side: Image with Pins */}
+        <div className="hidden md:block w-1/2 p-4">
+          <div className="relative w-full h-full rounded-none overflow-hidden">
+            <img 
+              src="/images/farmer-intro.jpg" 
+              alt="Beautiful Farm Landscape" 
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Glassmorphic Pin 1 */}
+            <div className="absolute top-1/4 left-[20%] flex flex-col items-center">
+              <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_white]" />
+              <div className="w-[1px] h-12 bg-white/50" />
+              <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-none p-3 flex items-center gap-3 shadow-xl">
+                <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                  <MapPin className="w-4 h-4 text-white" />
                 </div>
-                <div className="flex items-start gap-4">
-                  <div className="w-10 h-10 bg-[var(--muted)] rounded-full flex items-center justify-center flex-shrink-0">
-                    <Clock className="w-4 h-4 text-[var(--primary)]" />
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Response Time</p>
-                    <p className="text-sm font-medium text-[var(--foreground)]">Within 24 hours</p>
-                  </div>
+                <div>
+                  <p className="text-xs text-white/80 font-medium">Coffee Estate</p>
+                  <p className="text-sm text-white font-bold">Kilimanjaro</p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[var(--primary)] text-white rounded-2xl p-8">
-              <h3 className="font-serif text-lg font-bold mb-3">Connect on Social</h3>
-              <p className="text-white/70 text-sm mb-5">Follow us for daily inspiration from Tanzania's farms and fields.</p>
-              <div className="space-y-3">
-                <a href="https://instagram.com/agrifarmtourstz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
-                  <MessageCircle className="w-4 h-4" /> @agrifarmtourstz on Instagram
-                </a>
-                <a href="https://tiktok.com/@agrifarmtourstz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
-                  <MessageCircle className="w-4 h-4" /> @agrifarmtourstz on TikTok
-                </a>
-                <a href="https://facebook.com/agrifarmtourstz" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-white/80 hover:text-white transition-colors">
-                  <MessageCircle className="w-4 h-4" /> @agrifarmtourstz on Facebook
-                </a>
+            {/* Glassmorphic Pin 2 */}
+            <div className="absolute bottom-1/3 right-[15%] flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-none p-3 shadow-xl mb-3">
+                <p className="text-xs text-white/80 font-medium mb-1">Duration</p>
+                <p className="text-sm text-white font-bold leading-tight">3 - 5 days<br/>farm experience</p>
               </div>
+              <div className="w-[1px] h-12 bg-white/50" />
+              <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_white]" />
             </div>
+
           </div>
         </div>
-      </section>
+      </div>
     </div>
   )
 }

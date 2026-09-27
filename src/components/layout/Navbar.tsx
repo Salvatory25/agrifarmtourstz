@@ -27,20 +27,16 @@ export function Navbar() {
 
   const isHomepage = pathname === '/'
   
-  // Decide navbar color based on scroll & page
-  const navClass = clsx(
-    'fixed w-full z-50 transition-all duration-300',
-    {
-      'bg-white text-[var(--foreground)] shadow-sm': isScrolled || !isHomepage,
-      'bg-transparent text-white': !isScrolled && isHomepage,
-    }
-  )
+  // Always white navbar
+  const navClass = 'fixed w-full z-50 transition-all duration-300 bg-white text-[var(--foreground)] shadow-sm'
 
   const links = [
+    { name: 'Services', href: '/services' },
     { name: 'Experiences', href: '/experiences' },
     { name: 'Destinations', href: '/destinations' },
     { name: 'Stories', href: '/stories' },
     { name: 'About', href: '/about' },
+    { name: 'Contact', href: '/contact' },
   ]
 
   return (
@@ -48,13 +44,25 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="bg-white rounded-full p-1 shadow-sm">
-                <Image src="/logo.png" alt="AgriFarm Tours TZ Logo" width={48} height={48} className="object-contain rounded-full" />
+            <Link href="/" className="flex items-center gap-2 md:gap-3 group">
+              <div className="bg-white rounded-full p-1 shadow-sm flex items-center justify-center shrink-0 w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 group-hover:scale-105 transition-transform">
+                <Image 
+                  src="/logo.png" 
+                  alt="AgriFarm Tours TZ Logo" 
+                  width={56} 
+                  height={56} 
+                  className="w-full h-full object-contain rounded-full"
+                  priority 
+                />
               </div>
-              <span className={clsx("font-serif text-2xl font-bold tracking-tight hidden sm:block", (!isScrolled && isHomepage) ? "text-white" : "text-[var(--primary)]")}>
-                AgriFarm TZ
-              </span>
+              <div className="flex flex-col">
+                <span className="font-sans text-xl sm:text-2xl font-bold tracking-tight leading-none text-[var(--primary)]">
+                  AGRI FARM TOURS
+                </span>
+                <span className="text-[8px] sm:text-[10px] font-normal tracking-widest mt-0.5 text-amber-600/80">
+                  Experience Nature, Live the Farm
+                </span>
+              </div>
             </Link>
           </div>
           
@@ -85,7 +93,7 @@ export function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="inline-flex items-center justify-center p-2 rounded-md hover:text-[var(--accent)] focus:outline-none"
+              className="inline-flex items-center justify-center p-2 rounded-none hover:text-[var(--accent)] focus:outline-none"
             >
               <span className="sr-only">Open main menu</span>
               {mobileMenuOpen ? <X className="block h-6 w-6" /> : <Menu className="block h-6 w-6" />}

@@ -7,8 +7,8 @@ export function Footer() {
     <footer className="bg-[var(--foreground)] text-white pt-16 pb-8 px-6">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
         <div className="md:col-span-2">
-          <div className="flex items-center space-x-3 mb-4 bg-white/5 w-max p-2 rounded-xl">
-             <div className="bg-white rounded-lg p-1">
+          <div className="flex items-center space-x-3 mb-4 bg-white/5 w-max p-2 rounded-none">
+             <div className="bg-white rounded-none p-1">
                <Image src="/logo.png" alt="AgriFarm Tours TZ Logo" width={60} height={60} className="object-contain" />
              </div>
              <div>

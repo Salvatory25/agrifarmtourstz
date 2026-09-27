@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { MapPin, Clock, Users, ArrowRight, Check, X } from 'lucide-react'
+import { safeImageUrl, fallbackExperiences } from '@/lib/content'
 
 interface PageProps {
   params: Promise<{ slug: string }>
@@ -13,7 +14,11 @@ export async function generateMetadata({ params }: PageProps) {
   const supabase = await createClient()
   const { data } = await supabase.from('experiences').select('name, seo_title, seo_description').eq('slug', slug).single()
   
-  if (!data) return { title: 'Experience Not Found' }
+  if (!data) {
+    const fallback = fallbackExperiences.find(e => e.slug === slug)
+    if (fallback) return { title: `${fallback.name} | AgriFarm Tours TZ`, description: fallback.short_description }
+    return { title: 'Experience Not Found' }
+  }
   
   return {
     title: data.seo_title || `${data.name} | AgriFarm Tours TZ`,
@@ -25,15 +30,22 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
   const { slug } = await params
   const supabase = await createClient()
 
-  const { data: exp } = await supabase
+  const { data } = await supabase
     .from('experiences')
     .select('*, destinations(name, slug), experience_categories(name)')
     .eq('slug', slug)
     .eq('is_published', true)
-    .single()
+    .maybeSingle()
+
+  let exp = data
 
   if (!exp) {
-    notFound()
+    const fallback = fallbackExperiences.find(e => e.slug === slug)
+    if (fallback) {
+      exp = { ...fallback, full_description: fallback.short_description, highlights: [], whats_included: [], whats_not_included: [] }
+    } else {
+      notFound()
+    }
   }
 
   // Parse JSONB arrays safely
@@ -46,7 +58,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
       {/* Hero Section */}
       <section className="relative h-[70vh] min-h-[500px] flex items-end justify-center overflow-hidden">
         {exp.featured_image ? (
-          <Image src={exp.featured_image} alt={exp.name} fill className="object-cover" priority />
+          <Image src={safeImageUrl(exp.featured_image, 'https://images.unsplash.com/photo-1447195047884-9b4f2196ef6f?auto=format&fit=crop&q=80')} alt={exp.name} fill className="object-cover" priority sizes="100vw" />
         ) : (
           <div className="absolute inset-0 bg-[#2d4a22] flex items-center justify-center">
              <span className="font-serif italic text-3xl opacity-30 text-white">AgriFarm Tours</span>
@@ -146,7 +158,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
 
           {/* Booking Sidebar */}
           <div className="lg:col-span-1">
-            <div className="sticky top-28 bg-white rounded-2xl shadow-xl border border-[var(--border)] p-8">
+            <div className="sticky top-28 bg-white rounded-none shadow-xl border border-[var(--border)] p-8">
               {exp.price && (
                 <div className="mb-6 pb-6 border-b border-gray-100">
                   <span className="text-gray-500 text-sm font-medium uppercase tracking-wider block mb-1">From</span>
@@ -173,7 +185,7 @@ export default async function ExperienceDetailPage({ params }: PageProps) {
 
               <Link 
                 href={`/booking?experience=${exp.slug}`} 
-                className="w-full flex items-center justify-center bg-[var(--primary)] text-white px-6 py-4 rounded-xl font-bold text-lg hover:bg-[#223a1a] transition-all transform hover:scale-[1.02]"
+                className="w-full flex items-center justify-center bg-[var(--primary)] text-white px-6 py-4 rounded-none font-bold text-lg hover:bg-[#223a1a] transition-all transform hover:scale-[1.02]"
               >
                 Book This Experience
                 <ArrowRight className="ml-2 w-5 h-5" />

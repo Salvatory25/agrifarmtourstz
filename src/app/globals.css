@@ -35,7 +35,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
 }
 
@@ -49,7 +49,18 @@ body {
 
 /* Base heading styles */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-serif);
-  font-weight: 600;
+  font-family: var(--font-sans); /* Use Poppins for main headings */
+  font-weight: 700;
   letter-spacing: -0.02em;
+}
+
+/* Marquee animations for testimonials */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+
+@keyframes marquee-reverse {
+  0%   { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
 }
