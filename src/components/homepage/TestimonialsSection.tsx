@@ -28,7 +28,7 @@ const FALLBACK_IMG = 'https://images.unsplash.com/photo-1494790108377-be9c29b293
 
 function TestimonialCard({ t }: { t: Testimonial }) {
   return (
-    <div className="relative flex-shrink-0 w-[340px] sm:w-[400px] bg-white/5 backdrop-blur-sm border border-white/10 rounded-none p-7 mx-3 group hover:bg-white/10 hover:border-amber-400/40 transition-all duration-500">
+    <div className="relative flex-shrink-0 w-[300px] sm:w-[400px] bg-white/5 backdrop-blur-sm border border-white/10 rounded-none p-5 sm:p-7 mx-3 group hover:bg-white/10 hover:border-amber-400/40 transition-all duration-500">
       {/* Big decorative quote */}
       <div className="absolute top-5 right-6 text-amber-400/20 text-[80px] font-serif leading-none select-none">"</div>
 
@@ -40,7 +40,7 @@ function TestimonialCard({ t }: { t: Testimonial }) {
       </div>
 
       {/* Review text */}
-      <p className="font-serif italic text-white/85 leading-relaxed text-base line-clamp-4 mb-6">
+      <p className="font-serif italic text-white/85 leading-relaxed text-sm sm:text-base line-clamp-4 sm:line-clamp-none mb-6">
         &ldquo;{t.review}&rdquo;
       </p>
 
@@ -87,7 +87,7 @@ export default function TestimonialsSection({ testimonials }: Props) {
         className="relative z-10 text-center mb-14 px-4"
       >
         <p className="text-xs font-semibold uppercase tracking-[0.3em] text-amber-400 mb-3">Testimonials</p>
-        <h2 className="text-4xl md:text-5xl font-bold font-serif text-white">
+        <h2 className="text-3xl md:text-5xl font-bold font-serif text-white">
           What travellers <span className="text-amber-400">say</span>
         </h2>
         <p className="mt-4 text-white/50 max-w-md mx-auto text-base">

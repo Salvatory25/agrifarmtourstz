@@ -16,7 +16,7 @@ type GalleryItem = {
 }
 
 export default function GalleryCarousel({ gallery }: { gallery: GalleryItem[] }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: 'center', dragFree: true })
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' })
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const onSelect = useCallback(() => {

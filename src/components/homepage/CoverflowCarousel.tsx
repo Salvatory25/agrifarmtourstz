@@ -21,7 +21,7 @@ export default function CoverflowCarousel() {
   }, [])
 
   return (
-    <div className="relative w-full h-[380px] sm:h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
+    <div className="relative w-full h-[320px] sm:h-[450px] md:h-[550px] flex items-center justify-center [perspective:1200px]">
       {images.map((img, i) => {
         // Calculate the relative position for 3 items
         let diff = i - currentIndex

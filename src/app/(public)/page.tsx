@@ -23,7 +23,7 @@ export default async function Home() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-4">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
             <div className="flex -space-x-3">
               <img className="w-12 h-12 rounded-full border-2 border-amber-400 object-cover" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Client 1" />
               <img className="w-12 h-12 rounded-full border-2 border-amber-400 object-cover" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop" alt="Client 2" />
@@ -48,7 +48,7 @@ export default async function Home() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col-reverse sm:flex-row items-center gap-4 text-center sm:text-right">
             <p className="text-xl md:text-2xl font-bold text-gray-900 leading-tight text-right">Healthy life with <br /> fresh farm experiences</p>
             <div className="relative w-32 h-20 md:w-40 md:h-24 rounded-none overflow-hidden border-2 border-white shadow-lg group cursor-pointer">
               <img src="/images/farmer-intro.jpg" alt="Farmer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
@@ -63,11 +63,11 @@ export default async function Home() {
       </section>
 
       <section className="py-20 px-4 sm:px-6 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
-          <div className="w-full relative">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-14 lg:gap-16 items-center">
+          <div className="w-full relative order-2 lg:order-1">
             <CoverflowCarousel />
           </div>
-          <div className="space-y-6">
+          <div className="space-y-6 order-1 lg:order-2 px-2">
             <div className="inline-flex px-4 py-2 rounded-full border border-green-700 text-green-700 text-xs font-semibold tracking-[0.2em] uppercase">AgriFarm Tours TZ</div>
             <h2 className="text-4xl md:text-5xl font-bold font-serif text-gray-900 leading-tight">{intro.heading}</h2>
             <p className="text-lg text-gray-600 leading-relaxed">{intro.description}</p>

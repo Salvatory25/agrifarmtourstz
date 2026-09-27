@@ -67,14 +67,14 @@ export default function FeaturedExperiencesCarousel({ experiences }: { experienc
       {/* Navigation Buttons */}
       <button 
         onClick={() => emblaApi?.scrollPrev()}
-        className="absolute -left-5 top-[40%] -translate-y-1/2 w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-green-900 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:bg-green-50 hover:scale-110"
+        className="absolute -left-5 top-[40%] -translate-y-1/2 w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 hidden md:flex items-center justify-center text-green-900 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:bg-green-50 hover:scale-110"
         aria-label="Previous experiences"
       >
         <ChevronLeft className="w-6 h-6" />
       </button>
       <button 
         onClick={() => emblaApi?.scrollNext()}
-        className="absolute -right-5 top-[40%] -translate-y-1/2 w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center text-green-900 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:bg-green-50 hover:scale-110"
+        className="absolute -right-5 top-[40%] -translate-y-1/2 w-14 h-14 rounded-full bg-white shadow-xl border border-gray-100 hidden md:flex items-center justify-center text-green-900 opacity-0 group-hover:opacity-100 transition-all duration-300 z-10 hover:bg-green-50 hover:scale-110"
         aria-label="Next experiences"
       >
         <ChevronRight className="w-6 h-6" />
