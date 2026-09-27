@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
-import { Plus, Edit, Eye, BookOpen } from 'lucide-react'
+import { Plus, BookOpen } from 'lucide-react'
+import { AdminActionButtons } from '@/components/admin/AdminActionButtons'
 
 export default async function StoriesAdminPage() {
   const supabase = await createClient()
@@ -49,9 +50,14 @@ export default async function StoriesAdminPage() {
                       {post.is_published ? 'Published' : 'Draft'}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-right space-x-3">
-                    <Link href={`/stories/${post.slug}`} target="_blank" className="text-gray-400 hover:text-[var(--primary)] inline-block"><Eye className="w-4 h-4" /></Link>
-                    <Link href={`/admin/stories/${post.id}/edit`} className="text-gray-400 hover:text-blue-600 inline-block"><Edit className="w-4 h-4" /></Link>
+                  <td className="px-6 py-4">
+                    <AdminActionButtons 
+                      id={post.id} 
+                      slug={post.slug}
+                      viewPath="/stories/"
+                      editPath="/admin/stories/"
+                      deleteEndpoint="/api/admin/stories/"
+                    />
                   </td>
                 </tr>
               ))}

@@ -1,5 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
-import { Star } from 'lucide-react'
+import { Star, Plus } from 'lucide-react'
+import Link from 'next/link'
+import { AdminActionButtons } from '@/components/admin/AdminActionButtons'
 
 export default async function TestimonialsPage() {
   const supabase = await createClient()
@@ -10,21 +12,27 @@ export default async function TestimonialsPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-serif font-bold text-[var(--foreground)]">Testimonials</h1>
-        <p className="text-[var(--muted-foreground)]">Customer reviews and ratings.</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-serif font-bold text-[var(--foreground)]">Testimonials</h1>
+          <p className="text-[var(--muted-foreground)]">Customer reviews and ratings.</p>
+        </div>
+        <Link href="/admin/testimonials/new" className="inline-flex items-center bg-[var(--primary)] text-white px-4 py-2 rounded-none font-medium hover:bg-[#223a1a] transition-colors">
+          <Plus className="w-4 h-4 mr-2" />New Testimonial
+        </Link>
       </div>
 
       {!testimonials || testimonials.length === 0 ? (
-        <div className="bg-white rounded-xl border border-[var(--border)] p-12 text-center">
+        <div className="bg-white rounded-none border border-[var(--border)] p-12 text-center">
           <Star className="w-10 h-10 text-gray-200 mx-auto mb-3" />
           <p className="text-gray-400">No testimonials yet.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {testimonials.map((t) => (
-            <div key={t.id} className="bg-white rounded-xl border border-[var(--border)] p-6 shadow-sm">
-              <div className="flex items-center justify-between mb-3">
+            <div key={t.id} className="bg-white rounded-none border border-[var(--border)] p-6 shadow-sm flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-3">
                 <div className="flex">
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star key={i} className={'w-4 h-4 ' + (i < (t.rating || 0) ? 'text-[var(--accent)] fill-[var(--accent)]' : 'text-gray-200')} />
@@ -37,7 +45,14 @@ export default async function TestimonialsPage() {
               <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-4">"{t.review}"</p>
               <div className="border-t border-gray-100 pt-3">
                 <p className="font-medium text-gray-900 text-sm">{t.customer_name}</p>
-                <p className="text-xs text-gray-400">{t.country}{t.experiences?.name ? ' · ' + t.experiences.name : ''}</p>
+                <p className="text-xs text-gray-400 mb-4">{t.country}{t.experiences?.name ? ' · ' + t.experiences.name : ''}</p>
+                <div className="flex justify-end pt-2">
+                  <AdminActionButtons 
+                    id={t.id} 
+                    editPath="/admin/testimonials/"
+                    deleteEndpoint="/api/admin/testimonials/"
+                  />
+                </div>
               </div>
             </div>
           ))}

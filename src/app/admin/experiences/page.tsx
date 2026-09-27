@@ -1,6 +1,7 @@
 import { createClient } from '@/utils/supabase/server'
 import Link from 'next/link'
-import { Plus, Edit, Trash2, Eye } from 'lucide-react'
+import { Plus } from 'lucide-react'
+import { AdminActionButtons } from '@/components/admin/AdminActionButtons'
 
 export default async function ExperiencesPage() {
   const supabase = await createClient()
@@ -62,16 +63,14 @@ export default async function ExperiencesPage() {
                         {exp.is_published ? 'Published' : 'Draft'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-right space-x-3">
-                      <Link href={`/experiences/${exp.slug}`} target="_blank" className="text-gray-400 hover:text-[var(--primary)] inline-block" title="View">
-                        <Eye className="w-4 h-4" />
-                      </Link>
-                      <Link href={`/admin/experiences/${exp.id}/edit`} className="text-gray-400 hover:text-blue-600 inline-block" title="Edit">
-                        <Edit className="w-4 h-4" />
-                      </Link>
-                      <button className="text-gray-400 hover:text-red-600 inline-block" title="Delete">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+                    <td className="px-6 py-4">
+                      <AdminActionButtons 
+                        id={exp.id} 
+                        slug={exp.slug}
+                        viewPath="/experiences/"
+                        editPath="/admin/experiences/"
+                        deleteEndpoint="/api/admin/experiences/"
+                      />
                     </td>
                   </tr>
                 ))
